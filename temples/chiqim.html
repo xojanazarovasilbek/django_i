@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}📉 Chiqimlar{% endblock %}
+
+{% block content %}
+<div class="card p-3">
+  <h3>📉 Chiqimlar</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Summa</th>
+        <th>Kategoriya</th>
+        <th>Sana</th>
+        <th>To‘lov turi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for expense in expenses %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ expense.amount }} {{ expense.currency }}</td>
+        <td>{{ expense.category.name }}</td>
+        <td>{{ expense.date }}</td>
+        <td>{{ expense.payment_type }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">Chiqimlar mavjud emas</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'add_transaction' %}" class="btn btn-danger">➕ Yangi chiqim qo‘shish</a>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}📈 Kirimlar{% endblock %}
+
+{% block content %}
+<div class="card p-3">
+  <h3>📈 Kirimlar</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Summa</th>
+        <th>Kategoriya</th>
+        <th>Sana</th>
+        <th>To‘lov turi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for income in incomes %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ income.amount }} {{ income.currency }}</td>
+        <td>{{ income.category.name }}</td>
+        <td>{{ income.date }}</td>
+        <td>{{ income.payment_type }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">Kirimlar mavjud emas</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'add_transaction' %}" class="btn btn-success">➕ Yangi kirim qo‘shish</a>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Kundalik Moliyaviy Hisob{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f7fa;
+        }
+        .navbar {
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary container mt-2">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">💰 Kundalik</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'transactions' %}">Tranzaksiyalar</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'add_transaction' %}">➕ Qo‘shish</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'add_card' %}">💳 Karta qo‘shish</a></li>
+      </ul>
+
+      <!-- Til tanlash formasi -->
+      <form action="{% url 'set_language' %}" method="post" class="d-flex">
+        {% csrf_token %}
+        <select name="language" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+          <option value="uz" {% if LANGUAGE_CODE == 'uz' %}selected{% endif %}>🇺🇿 O‘zbek</option>
+          <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>🇷🇺 Русский</option>
+          <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇬🇧 English</option>
+        </select>
+      </form>
+      <!-- /Til tanlash formasi -->
+
+      {% if user.is_authenticated %}
+        <!-- <span class="navbar-text text-white mx-2">👤 {{ user.username }}</span> -->
+        <a href="{% url 'logout' %}" class="btn btn-sm btn-light">Chiqish</a>
+        <a href="{% url 'profile' %}" class="btn btn-sm btn-light">👤 {{ user.username }}</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-sm btn-light">Kirish</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

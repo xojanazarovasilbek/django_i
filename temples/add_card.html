@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}💳 Karta qo‘shish{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+  <h3>💳 Yangi karta qo‘shish</h3>
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- Karta nomi -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Karta nomi</label>
+      <input type="text" name="name" id="name" class="form-control" placeholder="Masalan: Asosiy karta" required>
+    </div>
+
+    <!-- Karta raqami -->
+    <div class="mb-3">
+      <label for="number" class="form-label">Karta raqami</label>
+      <input type="text" name="number" id="number" class="form-control" placeholder="8600 1234 5678 9999" required>
+    </div>
+
+    <!-- Balans -->
+    <div class="mb-3">
+      <label for="balance" class="form-label">Balans</label>
+      <input type="number" name="balance" id="balance" class="form-control" placeholder="0" step="0.01" required>
+    </div>
+
+    <!-- Valyuta -->
+    <div class="mb-3">
+      <label for="currency" class="form-label">Valyuta</label>
+      <select name="currency" id="currency" class="form-select">
+        <option value="UZS">🇺🇿 So‘m</option>
+        <option value="USD">🇺🇸 Dollar</option>
+      </select>
+    </div>
+
+    <!-- Tugmalar -->
+    <button type="submit" class="btn btn-primary">💾 Saqlash</button>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">⬅️ Orqaga</a>
+  </form>
+  
+</div>
+{% endblock %}

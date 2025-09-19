@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Tranzaksiya qo‘shish{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h4>➕ Yangi tranzaksiya qo‘shish</h4>
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Tranzaksiya turi -->
+        <div class="mb-3">
+            <label for="id_type" class="form-label">Tur</label>
+            {{ form.type }}
+        </div>
+
+        <!-- Kategoriya -->
+        <div class="mb-3">
+            <label for="id_category" class="form-label">Kategoriya</label>
+            {{ form.category }}
+        </div>
+
+        <!-- Summa -->
+        <div class="mb-3">
+            <label for="id_amount" class="form-label">Summa</label>
+            {{ form.amount }}
+        </div>
+
+        <!-- Valyuta -->
+        <div class="mb-3">
+            <label for="id_currency" class="form-label">Valyuta</label>
+            {{ form.currency }}
+        </div>
+
+        <!-- Sana va vaqt -->
+        <div class="mb-3">
+            <label for="id_created_at" class="form-label">📅 Sana va vaqt</label>
+            {{ form.created_at }}
+        </div>
+
+        <!-- Karta tanlash -->
+        <div class="mb-3">
+            <label for="card" class="form-label">Karta</label>
+            <select name="card" id="card" class="form-select">
+                <option value="">Hech qaysi</option> <!-- karta tanlamaslik imkoniyati -->
+                {% for c in cards %}
+                    <option value="{{ c.id }}">
+                        {{ c.name }} (**** **** **** {{ c.number|slice:"-4:" }})
+                        - {{ c.balance|intcomma }} {{ c.currency }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Tugmalar -->
+        <button type="submit" class="btn btn-primary mt-2">💾 Saqlash</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-2">⬅️ Orqaga</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- Statistikalar -->
+  <div class="row text-center mb-4">
+    <div class="col-md-4 mb-2">
+      <div class="card bg-success text-white shadow">
+        <div class="card-body">
+          <h5><a class="nav-link" href="{% url 'add_transaction' %}">Kirim</a></li></h5>
+          <h3>{{ total_income|intcomma }} so‘m</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-2">
+      <div class="card bg-danger text-white shadow">
+        <div class="card-body">
+          <h5><a class="nav-link" href="{% url 'add_transaction' %}">Chiqim</a></li></h5>
+          <h3>{{ total_expense|intcomma }} so‘m</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-2">
+      <div class="card bg-info text-white shadow">
+        <div class="card-body">
+          <h5>💰 Balans</h5>
+          <h3>{{ balance|intcomma }} so‘m</h3>
+          <small>(≈ ${{ balance_usd|floatformat:2 }})</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hisobot filtri -->
+  <div class="card p-3 mb-4 shadow-sm">
+    <h4>📊 Hisobot</h4>
+    <form method="get" class="d-flex mb-2">
+      <select name="period" class="form-select me-2 w-auto" onchange="this.form.submit()">
+        <option value="all" {% if period == "all" %}selected{% endif %}>Hammasi</option>
+        <option value="day" {% if period == "day" %}selected{% endif %}>Kunlik</option>
+        <option value="week" {% if period == "week" %}selected{% endif %}>Haftalik</option>
+        <option value="month" {% if period == "month" %}selected{% endif %}>Oylik</option>
+        <option value="year" {% if period == "year" %}selected{% endif %}>Yillik</option>
+      </select>
+    </form>
+
+    <p>💵 Kirim: <b>{{ total_income|intcomma }} so‘m</b></p>
+    <p>💸 Chiqim: <b>{{ total_expense|intcomma }} so‘m</b></p>
+    <p>💰 Balans: <b>{{ balance|intcomma }} so‘m</b></p>
+    <p>💲 Dollar ko‘rinishida: <b>${{ balance_usd|floatformat:2 }}</b></p>
+  </div>
+
+  <!-- Oxirgi tranzaksiyalar -->
+  <div class="card p-3 mb-4 shadow-sm">
+    <h4>📑 Oxirgi tranzaksiyalar</h4>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Sana</th>
+          <th>Tur</th>
+          <th>Kategoriya</th>
+          <th>Summasi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr>
+          <td>{{ t.created_at|date:"d-m-Y H:i" }}</td>
+          <td>
+            {% if t.type == 'income' %}
+              <span class="badge bg-success">Kirim</span>
+            {% else %}
+              <span class="badge bg-danger">Chiqim</span>
+            {% endif %}
+          </td>
+          <td>{{ t.category.name }}</td>
+          <td>{{ t.amount|intcomma }} {{ t.currency }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center text-muted">Tranzaksiya topilmadi</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Kartalar -->
+  <div class="card p-3 shadow-sm">
+    <h4>💳 Sizning kartalaringiz</h4>
+    <ul class="list-group">
+      {% for c in cards %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ c.name }} (**** **** **** {{ c.number|slice:"-4:" }})</span>
+          <span>{{ c.balance|intcomma }} {{ c.currency }}</span>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-center text-muted">Kartalar yo‘q</li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'add_card' %}" class="btn btn-primary mt-3">➕ Karta qo‘shish</a>
+  </div>
+
+</div>
+{% endblock %}

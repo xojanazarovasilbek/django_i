@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Ro‘yxatdan o‘tish</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 420px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 5px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .form-error {
+            color: red;
+            font-size: 13px;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="signup-container">
+    <h2>Ro‘yxatdan o‘tish</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Login -->
+        <label for="id_username">Login</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div class="form-error">{{ form.username.errors.0 }}</div>
+        {% endif %}
+
+        <!-- Ism -->
+        <label for="id_first_name">Ism</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+            <div class="form-error">{{ form.first_name.errors.0 }}</div>
+        {% endif %}
+
+        <!-- Familiya -->
+        <label for="id_last_name">Familiya</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+            <div class="form-error">{{ form.last_name.errors.0 }}</div>
+        {% endif %}
+
+        <!-- Email -->
+        <label for="id_email">Email</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+            <div class="form-error">{{ form.email.errors.0 }}</div>
+        {% endif %}
+
+
+        <!-- Parol -->
+        <label for="id_password1">Parol</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+            <div class="form-error">{{ form.password1.errors.0 }}</div>
+        {% endif %}
+
+        <!-- Parolni tasdiqlang -->
+        <label for="id_password2">Parolni tasdiqlang</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+            <div class="form-error">{{ form.password2.errors.0 }}</div>
+        {% endif %}
+
+        <button type="submit">Ro‘yxatdan o‘tish</button>
+        <button> <a href="{%url 'login'%}">kirish</a></button>
+    </form>
+</div>
+
+</body>
+</html>

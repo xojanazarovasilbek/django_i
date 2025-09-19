@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Parolni Tiklash</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reset-container {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #5d8ee1;
+        }
+
+        .code-timer-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer {
+            font-weight: bold;
+            color: #dc3545;
+            min-width: 55px;
+            font-size: 16px;
+        }
+
+        .timer.expired {
+            color: gray;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error,
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background-color: #4a63e7;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3743b7;
+        }
+
+        @media (max-width: 480px) {
+            .reset-container {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .timer {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reset-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <h2>Parolni Tiklash</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="password">Yangi parol</label>
+            <input type="password" name="password" id="password" required>
+
+            <label for="password_confirm">Parolni tasdiqlang</label>
+            <input type="password" name="password_confirm" id="password_confirm" required>
+
+            <label for="code">Tasdiqlash kodi</label>
+            <div class="code-timer-row">
+                <input type="text" name="code" id="code" maxlength="6" required>
+                <div class="timer" id="timer">01:00</div>
+            </div>
+
+            <button type="submit">Parolni Tiklash</button>
+        </form>
+    </div>
+
+    <script>
+        let duration = 60;
+        const timerEl = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            let minutes = Math.floor(duration / 60);
+            let seconds = duration % 60;
+
+            timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (duration <= 0) {
+                clearInterval(countdown);
+                timerEl.textContent = "00:00";
+                timerEl.classList.add("expired");
+            }
+
+            duration--;
+        }, 1000);
+    </script>
+</body>
+</html>
